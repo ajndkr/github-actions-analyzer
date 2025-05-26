@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,11 +8,11 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar, Pie, Doughnut } from 'react-chartjs-2';
-import { WorkflowData } from '../types';
-import html2canvas from 'html2canvas';
-import { Download } from 'lucide-react';
+} from "chart.js";
+import { Bar, Pie, Doughnut } from "react-chartjs-2";
+import { WorkflowData } from "../types";
+import html2canvas from "html2canvas";
+import { Download } from "lucide-react";
 
 ChartJS.register(
   CategoryScale,
@@ -21,7 +21,7 @@ ChartJS.register(
   ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 interface WorkflowChartProps {
@@ -29,42 +29,46 @@ interface WorkflowChartProps {
   maxItems?: number;
 }
 
-type ChartType = 'bar' | 'pie' | 'doughnut';
+type ChartType = "bar" | "pie" | "doughnut";
 
-const WorkflowChart: React.FC<WorkflowChartProps> = ({ data, maxItems = 10 }) => {
+const WorkflowChart: React.FC<WorkflowChartProps> = ({
+  data,
+  maxItems = 10,
+}) => {
   const chartRef = useRef<ChartJS>(null);
-  const [chartType, setChartType] = useState<ChartType>('bar');
+  const [chartType, setChartType] = useState<ChartType>("bar");
   const [itemCount, setItemCount] = useState(maxItems);
-  
+
   const topWorkflows = data.slice(0, itemCount);
 
   const handleExport = async () => {
     if (chartRef.current) {
       const canvas = await html2canvas(chartRef.current.canvas);
-      const link = document.createElement('a');
-      link.download = 'workflow-chart.png';
-      link.href = canvas.toDataURL('image/png');
+      const link = document.createElement("a");
+      link.download = "workflow-chart.png";
+      link.href = canvas.toDataURL("image/png");
       link.click();
     }
   };
-  
+
   const chartData = {
-    labels: topWorkflows.map(workflow => {
+    labels: topWorkflows.map((workflow) => {
       // Truncate long workflow names
       const name = workflow.workflow_name;
-      return name.length > 30 ? name.substring(0, 27) + '...' : name;
+      return name.length > 30 ? name.substring(0, 27) + "..." : name;
     }),
     datasets: [
       {
-        label: 'Minutes Consumed',
-        data: topWorkflows.map(workflow => workflow.quantity),
-        backgroundColor: chartType === 'bar' 
-          ? 'rgba(99, 102, 241, 0.8)'
-          : topWorkflows.map(() => `hsl(${Math.random() * 360}, 70%, 60%)`),
-        borderColor: 'rgba(79, 70, 229, 1)',
+        label: "Minutes Consumed",
+        data: topWorkflows.map((workflow) => workflow.quantity),
+        backgroundColor:
+          chartType === "bar"
+            ? "rgba(99, 102, 241, 0.8)"
+            : topWorkflows.map(() => `hsl(${Math.random() * 360}, 70%, 60%)`),
+        borderColor: "rgba(79, 70, 229, 1)",
         borderWidth: 1,
         borderRadius: 6,
-        hoverBackgroundColor: 'rgba(79, 70, 229, 0.9)',
+        hoverBackgroundColor: "rgba(79, 70, 229, 0.9)",
       },
     ],
   };
@@ -93,47 +97,47 @@ const WorkflowChart: React.FC<WorkflowChartProps> = ({ data, maxItems = 10 }) =>
           title: (context: any) => {
             const index = context[0].dataIndex;
             return topWorkflows[index].workflow_name;
-          }
-        }
-      }
+          },
+        },
+      },
     },
     scales: {
       x: {
         ticks: {
           maxRotation: 45,
           minRotation: 45,
-          callback: function(value: any, index: number) {
+          callback: function (value: any, index: number) {
             // Show shorter labels on small screens
             const label = this.getLabelForValue(index);
             if (window.innerWidth < 768) {
-              return label.length > 15 ? label.substring(0, 12) + '...' : label;
+              return label.length > 15 ? label.substring(0, 12) + "..." : label;
             }
             return label;
-          }
+          },
         },
         grid: {
           display: false,
-        }
+        },
       },
       y: {
         title: {
           display: true,
-          text: 'Minutes',
-          color: 'rgba(107, 114, 128, 1)',
+          text: "Minutes",
+          color: "rgba(107, 114, 128, 1)",
           font: {
             size: 12,
-            weight: 'normal'
-          }
+            weight: "normal",
+          },
         },
         grid: {
-          color: 'rgba(243, 244, 246, 1)',
-        }
-      }
+          color: "rgba(243, 244, 246, 1)",
+        },
+      },
     },
     animation: {
       duration: 1000,
-      easing: 'easeOutQuart'
-    }
+      easing: "easeOutQuart",
+    },
   };
 
   useEffect(() => {
@@ -181,9 +185,15 @@ const WorkflowChart: React.FC<WorkflowChartProps> = ({ data, maxItems = 10 }) =>
         </div>
       </div>
       <div className="h-[400px]">
-        {chartType === 'bar' && <Bar ref={chartRef} data={chartData} options={options} />}
-        {chartType === 'pie' && <Pie ref={chartRef} data={chartData} options={options} />}
-        {chartType === 'doughnut' && <Doughnut ref={chartRef} data={chartData} options={options} />}
+        {chartType === "bar" && (
+          <Bar ref={chartRef} data={chartData} options={options} />
+        )}
+        {chartType === "pie" && (
+          <Pie ref={chartRef} data={chartData} options={options} />
+        )}
+        {chartType === "doughnut" && (
+          <Doughnut ref={chartRef} data={chartData} options={options} />
+        )}
       </div>
     </div>
   );

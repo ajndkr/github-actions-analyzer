@@ -22,6 +22,6 @@ export interface SummaryStats {
   topConsumerPercentage: number;
   topConsumerName: string;
   topRepository?: string;
-  costTrend?: 'increasing' | 'decreasing' | 'stable';
+  costTrend?: "increasing" | "decreasing" | "stable";
   suggestions?: string[];
 }
