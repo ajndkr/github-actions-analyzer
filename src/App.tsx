@@ -49,7 +49,7 @@ function App() {
         <main className="space-y-8">
           {!hasData && (
             <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl font-semibold mb-4 flex items-center">
+              <h2 className={`text-xl font-semibold mb-4 flex items-center ${theme === 'light' ? 'text-gray-800' : 'text-gray-800'}`}>
                 <FileText className="w-5 h-5 mr-2 text-indigo-600" />
                 Upload your GitHub Actions CSV file
               </h2>
@@ -64,7 +64,7 @@ function App() {
                 </div>
               )}
               {isLoading && (
-                <div className="mt-4 flex justify-center items-center text-indigo-600">
+                <div className={`mt-4 flex justify-center items-center ${theme === 'light' ? 'text-indigo-600' : 'text-indigo-400'}`}>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                   Processing your data...
                 </div>
